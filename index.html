@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Scramble Fun!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Fredoka+One&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka One', cursive;
+            background: url('./unnamed.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+        }
+
+        #game-container {
+            width: 95%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .screen {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            color: #FF6B6B;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-card {
+            padding: 20px;
+        }
+
+        .scrambled {
+            font-size: 2rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: #FFD166;
+            border-radius: 10px;
+            color: #333;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        input#user-guess {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.2rem;
+            border: 3px solid #06D6A0;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: center;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Fredoka One', cursive;
+            transition: all 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #submit-btn {
+            background: #06D6A0;
+            color: white;
+        }
+
+        #hint-btn {
+            background: #4CC9F0;
+            color: white;
+        }
+
+        #new-word-btn {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        #feedback {
+            font-size: 1.3rem;
+            margin: 15px 0;
+            min-height: 30px;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .scrambled {
+                font-size: 1.5rem;
+            }
+
+            button {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+
+
+
+
+
+
+    <script type='text/javascript'
+        src='//pl20649698.profitableratecpm.com/c2/9c/21/c29c21d25bd7ed6bf78500f6de6402b7.js'></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+<script type="text/javascript">
+	atOptions = {
+		'key' : '001a0a52fbb5830cb441e8baab6aa215',
+		'format' : 'iframe',
+		'height' : 90,
+		'width' : 728,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/001a0a52fbb5830cb441e8baab6aa215/invoke.js"></script>
+
+    <script type="text/javascript">
+	atOptions = {
+		'key' : 'ae3d7c95e003f48f2cd6d027c99ef188',
+		'format' : 'iframe',
+		'height' : 60,
+		'width' : 468,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/ae3d7c95e003f48f2cd6d027c99ef188/invoke.js"></script>
+    <div id="game-container">
+        <div id="main-screen" class="screen">
+            <h1>Word Scramble Fun!</h1>
+            <div class="game-card">
+                <div id="scrambled-word" class="scrambled">Loading...</div>
+                <input type="text" id="user-guess" placeholder="Type your answer...">
+                <div class="buttons">
+                    <button id="submit-btn">Submit</button>
+                    <button id="hint-btn">Hint</button>
+                    <button id="new-word-btn">New Word</button>
+                </div>
+                <div id="feedback"></div>
+                <div class="score-board">
+                    <span>Score: <span id="score">0</span></span>
+                    <span>Streak: <span id="streak">0</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Game Elements
+            const scrambledWordEl = document.getElementById('scrambled-word');
+            const userGuessInput = document.getElementById('user-guess');
+            const submitBtn = document.getElementById('submit-btn');
+            const hintBtn = document.getElementById('hint-btn');
+            const newWordBtn = document.getElementById('new-word-btn');
+            const feedbackEl = document.getElementById('feedback');
+            const scoreEl = document.getElementById('score');
+            const streakEl = document.getElementById('streak');
+
+            // Game Variables
+            let currentWord = '';
+            let scrambledCurrentWord = '';
+            let score = 0;
+            let streak = 0;
+            let hintCount = 0;
+
+            // Word Bank (Easy for kids, some harder for adults)
+            const wordBank = [
+                "apple", "banana", "cat", "dog", "happy", "sun", "ball", "tree",
+                "house", "water", "music", "pizza", "jump", "smile", "cloud",
+                "beach", "friend", "school", "tiger", "flower", "garden", "orange",
+                "puzzle", "rocket", "dragon", "butterfly", "elephant", "rainbow"
+            ];
+
+            // Initialize Game
+            function initGame() {
+                pickNewWord();
+                updateScore();
+            }
+
+            // Pick a random word and scramble it
+            function pickNewWord() {
+                currentWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+                scrambledCurrentWord = scrambleWord(currentWord);
+                scrambledWordEl.textContent = scrambledCurrentWord;
+                userGuessInput.value = '';
+                feedbackEl.textContent = '';
+                hintCount = 0;
+            }
+
+            // Scramble the word
+            function scrambleWord(word) {
+                let letters = word.split('');
+                for (let i = letters.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [letters[i], letters[j]] = [letters[j], letters[i]];
+                }
+                return letters.join('');
+            }
+
+            // Check user's guess
+            function checkGuess() {
+                const userGuess = userGuessInput.value.trim().toLowerCase();
+
+                if (userGuess === currentWord) {
+                    feedbackEl.textContent = "✅ Correct! Great job!";
+                    feedbackEl.style.color = "#06D6A0";
+                    score += 10;
+                    streak++;
+                    setTimeout(() => {
+                        pickNewWord();
+                    }, 1500);
+                } else {
+                    feedbackEl.textContent = "❌ Try again!";
+                    feedbackEl.style.color = "#FF6B6B";
+                    streak = 0;
+                }
+                updateScore();
+            }
+
+            // Give a hint (reveals one letter at a time)
+            function giveHint() {
+                if (hintCount < currentWord.length) {
+                    const hint = currentWord.substring(0, hintCount + 1);
+                    feedbackEl.textContent = `Hint: ${hint}...`;
+                    hintCount++;
+                    score = Math.max(0, score - 2); // Small penalty for hints
+                    updateScore();
+                } else {
+                    feedbackEl.textContent = "No more hints! Try your best!";
+                }
+            }
+
+            // Update score display
+            function updateScore() {
+                scoreEl.textContent = score;
+                streakEl.textContent = streak;
+            }
+
+            // Event Listeners
+            submitBtn.addEventListener('click', checkGuess);
+            hintBtn.addEventListener('click', giveHint);
+            newWordBtn.addEventListener('click', pickNewWord);
+
+            // Allow Enter key to submit
+            userGuessInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    checkGuess();
+                }
+            });
+
+            // Start the game
+            initGame();
+        });
+    </script>
+
+
+<script type="text/javascript">
+	atOptions = {
+		'key' : 'ae3d7c95e003f48f2cd6d027c99ef188',
+		'format' : 'iframe',
+		'height' : 60,
+		'width' : 468,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/ae3d7c95e003f48f2cd6d027c99ef188/invoke.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type='text/javascript' src='//pl19335093.profitableratecpm.com/50/3f/0a/503f0a3d229c25c98e39805537025173.js'></script>
+</body>
+
+</html>
